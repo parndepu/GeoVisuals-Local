@@ -1,0 +1,16 @@
+# Mac default file structure
+.DS_STORE
+# Ignore visuals studio code
+.vscode
+# Dist directory
+dist
+# Dependency directories
+node_modules
+# Resources directory
+resources
+# Ignore package-lock file
+package-lock
+# Log file
+*.Log
+# Build directory
+build
