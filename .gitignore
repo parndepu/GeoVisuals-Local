@@ -6,7 +6,9 @@
 dist
 # Ignore database file
 data/mongodb/*
+!data/mongodb
 data/videos/*
+!data/videos
 # Dependency directories
 node_modules
 # Resources directory
