@@ -4,6 +4,9 @@
 .vscode
 # Dist directory
 dist
+# Ignore database file
+data/mongodb/*
+data/videos/*
 # Dependency directories
 node_modules
 # Resources directory

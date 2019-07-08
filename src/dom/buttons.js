@@ -1,10 +1,14 @@
 const map = require('../map');
-
+const panels = require('./panels');
 /**
  * Set all tools events
  */
 function Set_tools_buttons()
 {
+
+    $('#upload-btn').on('click', () => {
+        console.log('upload');
+    });
 
     // Set hover events
     $('.tools-button').hover( function () {
@@ -34,7 +38,7 @@ function Set_tools_buttons()
                 map.resize();
             } else {
                 left_panel.css('width', '300px');
-                right_panel.css('left', '300px');
+                right_panel.css('left', '345px');
                 map.resize();
             }
 
@@ -46,6 +50,11 @@ function Set_tools_buttons()
 
             $(this).css('border', '1px solid #000');
             $(this).addClass('active');
+
+            // Open tool contents
+            var tool_name = $(this).attr('name');
+            panels.Open_tool(tool_name);
+            
         }
 
     });
