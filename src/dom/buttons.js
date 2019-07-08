@@ -1,3 +1,5 @@
+const map = require('../map');
+
 /**
  * Set all tools events
  */
@@ -20,8 +22,21 @@ function Set_tools_buttons()
 
         if ($(this).hasClass('active')) {
 
-            // Hide tool contents
-            console.log('hide tab');
+            // Toggle left and right panel
+            var left_panel = $('#tools-resizable-container');
+            var right_panel = $('#map-container');
+
+            $(this).toggleClass('hide-tools');
+
+            if ($(this).hasClass('hide-tools')) {
+                left_panel.css('width', '0px');
+                right_panel.css('left', '45px');
+                map.resize();
+            } else {
+                left_panel.css('width', '300px');
+                right_panel.css('left', '300px');
+                map.resize();
+            }
 
         } else {
 
