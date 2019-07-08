@@ -1,11 +1,71 @@
 <!doctype html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title> GeoVisuals </title>
+<meta charset='utf-8' />
+<title> GeoVisuals System </title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<link href='../node_modules/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' />
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    #main-container {
+        width: 100%;
+        height: 100vh;
+        background: #f0f0f0;
+    }
+
+    #tools-container {
+        width: 45px;
+        height: 100%;
+        background: #fff;
+        /*border-right: 2px solid black;*/
+        padding: 5px;
+    }
+
+    .tools-button {
+        width: 100%;
+        height: 30px;
+        margin-bottom: 5px;
+        border: none;
+        outline: none !important;
+    }
+
+    .tools-button.active {
+        border: 1px solid #000;
+    }
+
+</style>
 </head>
 <body>
-<strong>Hello World</strong>
+
+<div id="main-container">
+
+    <div id="tools-container">
+        <button name="database" class="tools-button active"><i class="fas fa-database"></i></button> 
+        <button name="filter" class="tools-button"><i class="fas fa-filter"></i></button>
+        <button name="list" class="tools-button"><i class="fas fa-th-list"></i></button> 
+    </div>
+
+    <!-- resizable tool contents -->
+    <div id="tools-resizable-container">
+    </div>
+
+
+</div>
+
+<script src="../src/index.js"></script>
+<script src="../node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+<script src='../node_modules/popper.js/dist/umd/popper.min.js'></script>
+<script src='../node_modules/bootstrap/dist/js/bootstrap.min.js'></script>
+<style lang='scss'>
+@import '../node_modules/mapbox-gl/dist/mapbox-gl.css';
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+@import '../node_modules/%40mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+</style>
 </body>
-</html> 
+</html>

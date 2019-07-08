@@ -29,9 +29,9 @@ function createWindow () {
     mainWindow = new BrowserWindow({
         backgroundColor: 'lightgray',
         title: config.productName,
-        width: 650,
+        width: 800,
         height: 600,
-        minWidth: 650,
+        minWidth: 800,
         minHeight: 600,
         show: false,
         webPreferences: {
