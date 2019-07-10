@@ -27,6 +27,11 @@ function Initialize_dom()
 {
     // Set resizable panel
     components.Dom_resizable_panel();
+    // Set tool button
+    components.Dom_tool_buttons();
+    // Set input
+    components.Dom_video_input();
+    components.Dom_spreadsheet_input();
     return;
 }
 
