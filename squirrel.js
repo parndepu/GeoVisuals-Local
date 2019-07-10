@@ -1,6 +1,6 @@
 const child_process = require('child_process');
 const path = require('path');
-const main = require('./app')
+const main = require('./main')
 
 function handle_squirrel_event()
 {

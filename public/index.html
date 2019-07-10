@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title> GeoVisuals System </title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+</head>
+<div id="main-container">
+
+    <div id="tools-container">
+        <button name="data" class="tools-button active"><i class="fas fa-car-side"></i></button> 
+        <button name="query" class="tools-button"><i class="fas fa-vector-square"></i></button>
+        <button name="list" class="tools-button"><i class="fas fa-th-list"></i></button> 
+    </div>
+
+    <div id="tools-resizable-container">
+
+        <div id="data-tools-content" class="tools-content active">
+            <!-- manage all dataset -->
+            <div class="tools-header">TRIP MANAGER</div>
+            
+            <!-- import data -->
+            <div class="tools-subheader"><i class="fas fa-caret-down"></i> IMPORT YOUR TRIP <button id="reset-upload-btn" title="Reset selected files"><i class="fas fa-sync-alt"></i></button></div>
+            <div class="tool-content" id="upload-tool">
+                
+                <input id="video-name-input" class="file-input" type="text" placeholder="Select video file (.mp4 or .mov)" readonly>
+
+                <label>
+                    <span class="browse-btn">
+                        Browse&hellip;
+                        <input id="video-file-input" type="file" style="display: none;" accept="video/*" />
+                    </span>
+                </label>
+
+                <input id="data-name-input" class="file-input" type="text" placeholder="Select data (.csv or .json)" readonly>
+
+                <label>
+                    <span class="browse-btn">
+                        Browse&hellip;
+                        <input id="data-file-input" type="file" style="display: none;" accept="text/*" />
+                    </span>
+                </label>
+                Record Date: <input id="datet-input" class="upload-input" type="date" placeholder="recorded date">
+                Location: <input id="location-input" class="upload-input" type="text" placeholder="location (e.g., city, state)">
+                Description: <input id="description-input" class="upload-input" type="text" placeholder="video description">
+                Optional: <input id="optional-input" class="upload-input" type="text" placeholder="optional comments">
+
+                <button id="upload-btn" class="disable">IMPORT</button> 
+            </div>
+
+            <!-- data list -->
+            <div class="tools-subheader"><i class="fas fa-caret-down"></i> TRIP LIST</div>
+            <div class="tool-content" id="datalist-tool">
+                data list content
+            </div>
+
+        </div>
+        <div id="query-tools-content" class="tools-content">
+            <!-- manage all dataset -->
+            <div class="tools-header">SELECTION</div>
+        </div>
+
+    </div>
+
+    <div id="map-container">
+        <div id="drag-handle"></div>
+        <div id="map"></div>
+    </div>
+
+</div>
+
+<script src="../node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+<script src='../node_modules/popper.js/dist/umd/popper.min.js'></script>
+<script src='../node_modules/bootstrap/dist/js/bootstrap.min.js'></script>
+
+<style lang='scss'>
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/mapbox-gl/dist/mapbox-gl.css';
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+@import '../node_modules/%40mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+@import '../public/index.css';
+</style>
+
+<script>
+    // install babel hooks in the renderer process
+    require('babel-register');
+    require('../src/index');
+</script>
+
+</body>
+</html>

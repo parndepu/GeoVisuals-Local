@@ -1,9 +1,35 @@
-// Jquery
-window.$ = window.jQuery = require('jquery');
+// Local version of GeoVisuals application
+// (c) 2019, Suphanut Jamonnak
 
-const dom = require('./dom');
-const map = require('./map');
+import mapboxgl from 'mapbox-gl';
+window.mapboxgl = mapboxgl;
 
-// Initialize components
-dom.init();
-map.initialize();
+import * as components from './components';
+
+// Geovisuals attributes
+export var GeoVisuals_map = null;
+
+// Initialize Geovisuals system
+function Geovisuals_init()
+{
+    Initialize_map();
+    Initialize_dom();
+    return;
+}
+
+// Initialize mapbox and controls
+function Initialize_map()
+{
+    GeoVisuals_map = components.Mapbox_init('map');
+}
+
+function Initialize_dom()
+{
+    // Set resizable panel
+    components.Dom_resizable_panel();
+    return;
+}
+
+window.onload = function() {
+    Geovisuals_init();
+};

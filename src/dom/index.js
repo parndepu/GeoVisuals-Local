@@ -5,6 +5,7 @@ const panels = require('./panels');
 function init()
 {
     buttons.Set_tools_buttons();
+    buttons.Set_browse_buttons();
     panels.Set_resizable_panel();
 }
 
