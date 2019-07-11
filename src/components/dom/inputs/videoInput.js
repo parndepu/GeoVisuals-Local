@@ -32,7 +32,7 @@ export default function ()
             var video_file = {
                 name: file.name,
                 size: Util_format_bytes(file.size),
-                object: new File([file], 'geovisuals-video.mp4')
+                object: file
             };
             
             // Set upload file video

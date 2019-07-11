@@ -1,0 +1,28 @@
+.trip-container {
+    width: 100%;
+    height: auto;
+    background: #fff7ec;
+    margin-top: 2px;
+    padding: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.trip-container.active {
+    background: #ffffff;
+    border: 2px solid #000000;
+}
+.trip-container:hover {
+    background: #f0f0f0;
+}
+
+.trip-video-container {
+    width: 150px;
+    height: 90px;
+    cursor: pointer;
+}
+
+.trip-video-player {
+    width: 100%;
+    height: 100%;
+}

@@ -7,12 +7,14 @@ window.mapboxgl = mapboxgl;
 import * as components from './components';
 
 // Geovisuals attributes
-export var GeoVisuals_map = null;
 export var db_name = "GeoVisuals-Local";
 
 // All mongodb collections
 export var trip_model = null;
 export var trip_data_model = null;
+
+// Global geovisuals data
+export var all_trips = null;
 
 // Initialize Geovisuals system
 function Geovisuals_init()
@@ -20,14 +22,20 @@ function Geovisuals_init()
     Initialize_map();
     Initialize_dom();
     Initilaize_database();
+    Initialize_user_data();
     return;
 }
 
 // Initialize mapbox and controls
 function Initialize_map()
 {
-    GeoVisuals_map = components.Mapbox_init('map');
+    components.Mapbox_init('map');
     // TODO: need to add more controls here
+    components.Mapbox_draw_control(components.Mapbox_map);
+    components.Mapbox_fullscreen_control(components.Mapbox_map);
+    components.Mapbox_navigation_control(components.Mapbox_map);
+
+    return;
 }
 
 function Initialize_dom()
@@ -56,30 +64,47 @@ function Initilaize_database()
     trip_data_model = components.Query_db_model('TripData', trip_data_schema);
 
     return;
-    /*
-    var new_trip = new trip_model({
-        upload_date: '12/12/1949',
-        upload_time: '15:30:20',
-        upload_location: 'Kent,OH',
-        upload_description: 'My model testing',
-        upload_optional: 'Optional testing'
-    });*/
-
-    // Save query
-    /*
-    new_trip.save( function (err, new_trip) {
-        if (err) return console.error(err);
-        console.log(new_trip);
-    });*/
-
-    // Find query
-    /*
-    trip_model.find( function (err, trip) {
-        if (err) return console.error(err);
-        console.log(trip);
-    });*/
 }
 
+// Initialize user data from here
+export function Initialize_user_data()
+{
+    // Find all trips and list it again
+    trip_model.find( function (err, trips) {
+        all_trips = components.Dom_list_allTrips(trips);
+        show_active_trip();
+    });
+    return;
+}
+
+/**
+ * Show active trip
+ */
+export function show_active_trip()
+{
+    // Filter active trips
+    var trips_id = [];
+    var active_trips = [];
+    for (var i = 0; i < all_trips.length; ++i) {
+        if (all_trips[i].active) {
+            trips_id.push(all_trips[i]._id);
+            active_trips.push(all_trips[i]);
+        }
+    }
+
+    // Find all active trips
+    components.Query_db_findTrip(trips_id, active_trips).then( function (result) {
+        components.Mapbox_clear_layers();
+        components.Mapbox_draw_trips(result);
+    });
+    // Draw trips
+
+    return;
+}
+
+/**
+ * Starting points
+ */
 window.onload = function() {
     Geovisuals_init();
 };

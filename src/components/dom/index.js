@@ -18,3 +18,6 @@ export { default as Dom_reset_upload_input } from './inputs/resetUpload';
 
 // Alert features
 export { default as Dom_show_alert } from './alerts';
+
+// List features
+export { default as Dom_list_allTrips } from './list/listAllTrips';

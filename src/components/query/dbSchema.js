@@ -9,8 +9,7 @@ export default {
     {
         // Create trip schema
         var trip_schema = new mongoose.Schema({
-            upload_date: Date, // MM/DD/YYYY
-            upload_time: String, // HH:MM:SS
+            upload_datetime: String, // MM/DD/YYYY
             upload_location: String, // Address
             upload_description: String, // Trip description
             upload_optional: String // Optional description
@@ -22,18 +21,27 @@ export default {
     Trip_data: function () 
     {
         // Create trip data schema
+        var ObjectId = mongoose.Schema.Types.ObjectId;
         var trip_data_schema = new mongoose.Schema({
-            date: Date, // MM/DD/YYYY
-            time: String, // HH:MM:SS
-            location: {
-                latitude: Number,
-                longitude: Number,
+            tripID: {
+                type: ObjectId,
+                index: 1
             },
-            narrative: String
+            datetime: {
+                type: Date
+            },
+            location: {
+                type: [Number, Number],
+                index: { type: '2dsphere', sparse: true }
+            },
+            narrative: {
+                type: String
+            }
         });
 
         // Create 2d indexing
-        trip_data_schema.index('2dSphere');
+        trip_data_schema.index(true);
+        trip_data_schema.index({ unique: true, sparse: true });
 
         return trip_data_schema;
     }

@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 export default function (dbname)
 {
     // Make connection to database
+    mongoose.set('useCreateIndex', true)
     mongoose.connect('mongodb://localhost/' + dbname, { useNewUrlParser: true });
     
     var db = mongoose.connection;
