@@ -26,9 +26,8 @@ export default function ()
             Upload_file.video = undefined;
         }
 
-        if (    Util_validate_filetype(file.type, 'mp4') || 
-                Util_validate_filetype(file.type, 'mov')) {
-
+        if (Util_validate_filetype(file.type, 'mp4') || Util_validate_filetype(file.type, 'mov')) {
+            
             // Create video file structure
             var video_file = {
                 name: file.name,

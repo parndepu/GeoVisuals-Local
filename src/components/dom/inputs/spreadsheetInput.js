@@ -28,8 +28,7 @@ export default function ()
             Upload_file.spreadsheet = undefined;
         }
 
-        if (    Util_validate_filetype(file.type, 'csv') ||
-                Util_validate_filetype(file.type, 'json')) {
+        if (Util_validate_filetype(file.type, 'csv') || Util_validate_filetype(file.type, 'json')) {
             
             // Read csv file and parse it to json        
             var reader = new FileReader();
