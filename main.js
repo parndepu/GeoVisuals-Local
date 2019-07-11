@@ -1,4 +1,5 @@
 import { app, BrowserWindow, globalShortcut } from 'electron';
+import mongoose from 'mongoose';
 import * as path from 'path';
 import * as os from 'os';
 
@@ -59,6 +60,8 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
         app.quit();
     }
+    // Close mongodb connection
+    mongoose.disconnect();
 });
 
 app.on('activate', function () {

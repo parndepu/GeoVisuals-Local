@@ -20,7 +20,10 @@
             <div class="tools-header">TRIP MANAGER</div>
             
             <!-- import data -->
-            <div class="tools-subheader"><i class="fas fa-caret-down"></i> IMPORT YOUR TRIP <button id="reset-upload-btn" title="Reset selected files"><i class="fas fa-sync-alt"></i></button></div>
+            <div class="tools-subheader"><i class="fas fa-caret-down"></i> 
+                IMPORT YOUR TRIP 
+                <button id="reset-upload-btn" title="Reset selected files"><i class="fas fa-sync-alt"></i></button>
+            </div>
             <div class="tool-content" id="upload-tool">
                 
                 <input id="video-name-input" class="file-input" type="text" placeholder="Select video file (.mp4 or .mov)" readonly>
@@ -37,15 +40,15 @@
                 <label>
                     <span class="browse-btn">
                         Browse&hellip;
-                        <input id="data-file-input" type="file" style="display: none;" accept="text/*" />
+                        <input id="data-file-input" type="file" style="display: none;" />
                     </span>
                 </label>
-                Record Date: <input id="datet-input" class="upload-input" type="date" placeholder="recorded date">
+                
                 Location: <input id="location-input" class="upload-input" type="text" placeholder="location (e.g., city, state)">
                 Description: <input id="description-input" class="upload-input" type="text" placeholder="video description">
                 Optional: <input id="optional-input" class="upload-input" type="text" placeholder="optional comments">
 
-                <button id="upload-btn" class="disable">IMPORT</button> 
+                <button id="upload-btn" class="enable">IMPORT</button> 
             </div>
 
             <!-- data list -->

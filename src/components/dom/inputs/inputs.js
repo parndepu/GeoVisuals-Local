@@ -6,7 +6,8 @@ export default {
     spreadsheet_file_input: $('#data-file-input'),
     spreadsheet_name_input: $('#data-name-input'),
 
+    location_input: $('#location-input'),
+    description_input: $('#description-input'),
+    optional_input: $('#optional-input')
 
-    //description_input,
-    //optional_input,
 }
