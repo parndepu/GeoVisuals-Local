@@ -20,9 +20,13 @@ export var all_trips = null;
 function Geovisuals_init()
 {
     Initialize_map();
-    Initialize_dom();
-    Initilaize_database();
-    Initialize_user_data();
+
+    //components.Mapbox_map.on('style.load', function () {
+        Initialize_dom();
+        Initilaize_database();
+        Initialize_user_data();
+    //});
+
     return;
 }
 
@@ -30,10 +34,14 @@ function Geovisuals_init()
 function Initialize_map()
 {
     components.Mapbox_init('map');
+    
     // TODO: need to add more controls here
-    components.Mapbox_draw_control(components.Mapbox_map);
-    components.Mapbox_fullscreen_control(components.Mapbox_map);
-    components.Mapbox_navigation_control(components.Mapbox_map);
+    components.Mapbox_map.on('load', function () {
+        components.Mapbox_fullscreen_control(components.Mapbox_map);
+        components.Mapbox_navigation_control(components.Mapbox_map);
+        components.Mapbox_draw_control(components.Mapbox_map);
+        console.log('d');
+    });
 
     return;
 }
@@ -96,6 +104,7 @@ export function show_active_trip()
     components.Query_db_findTrip(trips_id, active_trips).then( function (result) {
         components.Mapbox_clear_layers();
         components.Mapbox_draw_trips(result);
+        components.Mapbox_draw_narratives(result);
     });
     // Draw trips
 

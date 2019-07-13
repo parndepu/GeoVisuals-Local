@@ -36,7 +36,8 @@ export default function (trips)
             },
             "paint": {
                 "line-color": trips[i].color,
-                "line-width": 5
+                "line-width": 3,
+                //"line-dasharray": [1, 2]
             }
         };
 
@@ -55,10 +56,11 @@ export default function (trips)
         });
 
         // Add trajectory layer to map layers
-        Map_layers.push(trajectory_layer);
+        Map_layers.trips.push(trajectory_layer);
     }
 
     for (var i = 0; i < trips.length; ++i) {
+
         var geojson = {
             type: 'FeatureCollection',
             features: [{
@@ -83,6 +85,7 @@ export default function (trips)
             var video_player = document.createElement('video');
             video_player.className = "trip-video-player";
             video_player.src = '../data/videos/' + trips[i].id + '.mp4';
+            video_player.trip = trips[i];
             
             marker_container.appendChild(video_player);
             marker_container.style.background = trips[i].color;
@@ -97,9 +100,30 @@ export default function (trips)
                 }
             });
 
-            new mapboxgl.Marker(marker_container)
-                .setLngLat(marker.geometry.coordinates)
-                .addTo(Mapbox_map);
+            var marker = new mapboxgl.Marker(marker_container)
+                            .setLngLat(marker.geometry.coordinates)
+                            .addTo(Mapbox_map);
+            Map_layers.trip_video_markers.push(marker);
+
+            /*
+            function animate_marker(timestamp) 
+            {
+                console.log(timestamp / 1000);
+                var radius = 20;
+
+                marker.setLngLat([]);
+                
+                // Ensure it's added to the map. This is safe to call if it's already added.
+                marker.addTo(Mapbox_map);
+                requestAnimationFrame(animate_marker);
+            }*/
+
+            video_player.ontimeupdate = function() {
+                //console.log(video_player.currentTime);
+                marker.setLngLat(video_player.trip.path[Math.round(video_player.currentTime)]);
+                marker.addTo(Mapbox_map);
+                //requestAnimationFrame(animate_marker);
+            }
         });
     }
 }

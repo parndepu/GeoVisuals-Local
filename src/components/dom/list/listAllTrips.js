@@ -1,32 +1,84 @@
-import { Util_random_color } from '../../index';
-import { show_active_trip } from '../../../index';
-
-var list_container = $('#datalist-tool');
+import { Util_random_color, Query_db_removeTrip } from '../../index';
+import { default as panels } from '../panels/panels';
+import { show_active_trip, Initialize_user_data, trip_data_model } from '../../../index';
+import mongoose from 'mongoose';
 
 /**
  * Clear all list
  */
 function clear_list()
 {
-    return list_container.empty();
+    return panels.data_list_panel.empty();
+}
+
+// Details button
+function get_detail_button()
+{
+
+    // Info button
+    var info_button = $('<button/>', {
+        title: 'Show information of this trip',
+        class: 'info-trip-btn trip-button',
+    });
+    // Info icon
+    var info_icon = $('<i/>', {
+        class: 'fas fa-info'
+    });
+
+    info_button.append(info_icon);
+
+    return info_button;
+}
+
+// Remove button
+function get_remove_button(trip, trips, index)
+{
+    // Remove button
+    var remove_btn = $('<button/>', {
+        title: 'Remove this trip',
+        class: 'remove-trip-btn trip-button',
+    });
+    // Trash icon
+    var trash_icon = $('<i/>', {
+        class: 'fas fa-trash'
+    });
+
+    remove_btn.append(trash_icon);
+    remove_btn.on('click', function (e) {
+
+        e.stopPropagation();
+
+        var yes_no = confirm("Are you sure to remove this trip?");
+        if (yes_no === true) {
+            Query_db_removeTrip(trip.id).then( function (data) {
+                alert(data);
+                // Show active trip
+                trips.splice(index, 1);
+                Initialize_user_data();
+            });
+        }
+    });
+
+    return remove_btn;
 }
 
 /**
  * Create trip container
  * @param {*} trip 
  */
-function get_trip_container(trip)
+function get_trip_container(trip, index)
 {
-    let trip_detail = "ID: " + trip.id + '<br>' 
-        + "Created At: " + trip.upload_datetime + '<br>'
-        + "Location: " + trip.upload_location + '<br>'
-        + "Description: " + trip.upload_description + '<br>'
-        + "Optional Comments: " + trip.upload_optional;
+    var trip_title = $('<label/>').html("Trip: " + (index + 1));
+
+    var color_btn = $('<button/>', {
+        title: 'Change color of this trip',
+        class: 'trip-button color-trip-btn',
+    }).css({ background: trip.color });
 
     return $('<div/>', {
         id: 'trip-' + trip.id ,
         class: 'trip-container active'
-    }).html(trip_detail);
+    }).append(color_btn).append(trip_title);
 }
 
 /**
@@ -38,7 +90,6 @@ function set_onclick(container, trip)
 {
     // Toggle active trip status
     container.on('click', function () {
-
         if ($(this).hasClass('active')) {
             $(this).removeClass('active');
             trip.active = false;
@@ -50,10 +101,37 @@ function set_onclick(container, trip)
             // Show active trip
             show_active_trip();
         }
-
     });
 
     return;
+}
+
+function set_show_details(detail_btn, container, trip) 
+{
+    detail_btn.on('click', function (e) {
+        e.stopPropagation();
+
+        var ObjectId = mongoose.Types.ObjectId;
+        //container.append(trip_detail);
+        // Find trip date
+        trip_data_model.find({ tripID: ObjectId(trip.id)}, function (err, data) {
+            console.log(data[0]);
+
+            // Trip information
+            var trip_detail = "Trip Date:" + data[0].datetime + '<br>'
+            + "Upload At: " + trip.upload_datetime + '<br>'
+            + "Location: " + trip.upload_location + '<br>'
+            + "Description: " + trip.upload_description + '<br>'
+            + "Optional Comments: " + trip.upload_optional;
+
+            var detail_container = $('<div/>', {
+                class: 'trip-detail-container'
+            }).html(trip_detail);
+
+            container.after(detail_container);
+
+        });
+    });
 }
 
 /**
@@ -74,10 +152,17 @@ export default function (trips)
         trip.color = Util_random_color();
 
         // Get container and set onclick events
-        var trip_container = get_trip_container(trip);
+        var trip_container = get_trip_container(trip, i);
+        var remove_button = get_remove_button(trip, trips, i);
+        var detail_button = get_detail_button();
+        
         set_onclick(trip_container, trip);
+        set_show_details(detail_button, trip_container, trip);
         // Add to list container
-        list_container.append(trip_container);
+        trip_container
+            .append(remove_button)
+            .append(detail_button);
+        panels.data_list_panel.append(trip_container);
     }
 
     return trips;

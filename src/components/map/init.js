@@ -14,7 +14,7 @@ export default function (container_id)
     
     Mapbox_map = new mapboxgl.Map({
         container: container_id,
-        style: 'mapbox://styles/mapbox/light-v10',
+        style: 'mapbox://styles/mapbox/light-v9',
         center: [-74.50, 40],
         zoom: 9,
         pitch: 45,

@@ -149,3 +149,12 @@ body {
     cursor: col-resize;
     z-index: 1000;
 }
+
+#search-btn {
+    width: auto;
+    height: auto;
+    border: none;
+    outline: none !important;
+    color: #fff;
+    background: #000;
+}

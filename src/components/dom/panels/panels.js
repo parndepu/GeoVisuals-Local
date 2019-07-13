@@ -5,5 +5,6 @@ export default {
     handle: $('#drag-handle'),
     toolContent: $('.tools-content'),
     dataTool: $('#data-tools-content'),
-    queryTool: $('#query-tools-content')
+    queryTool: $('#query-tools-content'),
+    data_list_panel: $('#datalist-tool')
 }

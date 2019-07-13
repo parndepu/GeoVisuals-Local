@@ -1,19 +1,43 @@
 .trip-container {
     width: 100%;
-    height: auto;
-    background: #fff7ec;
+    height: 30px;
     margin-top: 2px;
-    padding: 5px;
+    padding: 2px;
     cursor: pointer;
     border: none;
+    font-weight: bold;
+    color: #d9d9d9;
 }
-
 .trip-container.active {
+    color: #000;
     background: #ffffff;
-    border: 2px solid #000000;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
 }
 .trip-container:hover {
-    background: #f0f0f0;
+    border: 1px solid #000;
+}
+
+.trip-button {
+    width: 30px;
+    height: 22px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    outline: none !important;
+    background: #ffffff;
+    margin-right: 4px;
+}
+.trip-button:hover {
+    border: 1px dashed #000;
+}
+
+.info-trip-btn {
+    color: #9ecae1;
+    float: right;
+}
+.remove-trip-btn {
+    color: #fc9272;
+    float: right;
 }
 
 .trip-video-container {
@@ -25,4 +49,16 @@
 .trip-video-player {
     width: 100%;
     height: 100%;
+}
+
+.trip-detail-container {
+    width: 100%;
+    height: 120px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #fff;
+    margin-top: 2px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 2px;
 }
