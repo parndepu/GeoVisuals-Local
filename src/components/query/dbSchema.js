@@ -35,13 +35,22 @@ export default {
                 index: { type: '2dsphere', sparse: true }
             },
             narrative: {
-                type: String
+                type: String,
+                index: { type: 'text'}
+            },
+            editDate: {
+                type: Date
+            },
+            editNarrative: {
+                type: String,
+                index: { type: 'text'}
             }
         });
 
         // Create 2d indexing
         trip_data_schema.index(true);
         trip_data_schema.index({ unique: true, sparse: true });
+        //trip_data_schema.index({ narrative: 'text', editNarrative: 'text'});
 
         return trip_data_schema;
     }

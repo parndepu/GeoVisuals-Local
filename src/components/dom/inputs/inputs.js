@@ -8,6 +8,7 @@ export default {
 
     location_input: $('#location-input'),
     description_input: $('#description-input'),
-    optional_input: $('#optional-input')
+    optional_input: $('#optional-input'),
 
+    keyword_input: $('#keywird-input')
 }

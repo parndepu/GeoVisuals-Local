@@ -60,11 +60,12 @@ body {
 /* single tool contents */
 .tool-content {
     width: 100%;
+    height: auto;
     overflow: auto;
     font-size: 12px;
 }
 #upload-tool {
-    height: auto;
+    height: 200px;
 }
 
 #reset-upload-btn {
@@ -99,6 +100,17 @@ body {
     background: #252525;
     outline: none !important;
     border-radius: 5px;
+    margin-top: 2px;
+}
+
+#original-btn {
+    width: 100%;
+    height: auto;
+    color: #000000;
+    background: #d9ef8b;
+    outline: none !important;
+    border-radius: 5px;
+    margin-top: 2px;
 }
 
 #upload-btn.disable {
@@ -140,6 +152,19 @@ body {
     height: 100%;
 }
 
+#video-right-container {
+    width: 500;
+    height: auto;
+    position: absolute;
+    z-index: 1000;
+    bottom: 20px;
+    right: 20px;
+    border: 2px solid #d9d9d9;
+    border-radius: 5px;
+    display: none;
+    background: #f0f0f0;
+}
+
 #drag-handle {
     position: absolute;
     left: -4px;
@@ -157,4 +182,10 @@ body {
     outline: none !important;
     color: #fff;
     background: #000;
+}
+
+mark{
+    background: #ffeda0;
+    color: black;
+    font-weight: bold;
 }

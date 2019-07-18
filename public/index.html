@@ -49,6 +49,7 @@
                 Optional: <input id="optional-input" class="upload-input" type="text" placeholder="optional comments">
 
                 <button id="upload-btn" class="enable">IMPORT</button> 
+                <button id="original-btn">ENABLE ORIGINAL VIEW</button>
             </div>
 
             <!-- data list -->
@@ -69,9 +70,9 @@
                 <button id="search-btn" title="Search keywords"><i class="fas fa-search"></i></button>
             </div>
             <div class="tools-subheader"><i class="fas fa-caret-down"></i> 
-                Query Result
+                Search Result
             </div>
-            <div class="tool-content" id="upload-tool">
+            <div class="tool-content" id="search-result">
                 list of query
             </div>
         </div>
@@ -81,6 +82,7 @@
     <div id="map-container">
         <div id="drag-handle"></div>
         <div id="map"></div>
+        <div id="video-right-container"></div>
     </div>
 
 </div>
@@ -89,6 +91,7 @@
 <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
 <script src='../node_modules/popper.js/dist/umd/popper.min.js'></script>
 <script src='../node_modules/bootstrap/dist/js/bootstrap.min.js'></script>
+<script src="../node_modules/mark.js/dist/mark.min.js" charset="UTF-8"></script>
 
 <style lang='scss'>
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';

@@ -35,15 +35,37 @@
     color: #9ecae1;
     float: right;
 }
+.video-trip-btn {
+    color: #addd8e;
+    float: right;
+}
+.point-trip-btn {
+    color: #fed976;
+    float: right;
+}
 .remove-trip-btn {
     color: #fc9272;
     float: right;
 }
 
+.video-container {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    background: #ffff;
+    margin-top: 2px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+
 .trip-video-container {
     width: 150px;
     height: 90px;
     cursor: pointer;
+    opacity: 0.8;
+    border-radius: 5px;
 }
 
 .trip-video-player {
@@ -62,3 +84,36 @@
     border-radius: 4px;
     padding: 2px;
 }
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    background: #f0f0f0;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+  
+  .slider:hover {
+    opacity: 1;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #f4a582;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #f4a582;
+    cursor: pointer;
+  }

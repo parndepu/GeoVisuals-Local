@@ -1,7 +1,10 @@
 import { Util_random_color, Query_db_removeTrip } from '../../index';
 import { default as panels } from '../panels/panels';
-import { show_active_trip, Initialize_user_data, trip_data_model } from '../../../index';
+import { show_active_trip, Initialize_user_data, trip_data_model, original_mode } from '../../../index';
 import mongoose from 'mongoose';
+import { default as get_video_button} from './trip/videoButton';
+import { default as get_point_button} from './trip/pointButton';
+
 
 /**
  * Clear all list
@@ -77,7 +80,7 @@ function get_trip_container(trip, index)
 
     return $('<div/>', {
         id: 'trip-' + trip.id ,
-        class: 'trip-container active'
+        class: trip.active ? 'trip-container active' : 'trip-container'
     }).append(color_btn).append(trip_title);
 }
 
@@ -86,51 +89,86 @@ function get_trip_container(trip, index)
  * @param {*} container 
  * @param {*} trip 
  */
-function set_onclick(container, trip)
+function set_onclick(container, trip, trips)
 {
+    // TODO: need to disable all button and hide all details
     // Toggle active trip status
     container.on('click', function () {
-        if ($(this).hasClass('active')) {
-            $(this).removeClass('active');
-            trip.active = false;
-            // Show active trip
-            show_active_trip();
-        } else {
+
+        if (original_mode) {
+
+            $('.trip-container').removeClass('active');
+
+            for (var i = 0; i < trips.length; ++i) {
+                trips[i].active = false;
+            }
+
             $(this).addClass('active');
             trip.active = true;
             // Show active trip
             show_active_trip();
+
+        } else {
+
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                trip.active = false;
+                // Show active trip
+                show_active_trip();
+            } else {
+                $(this).addClass('active');
+                trip.active = true;
+                // Show active trip
+                show_active_trip();
+            }
+
         }
     });
 
     return;
 }
 
+/**
+ * Toggle button to show trip detail 
+ * @param {*} detail_btn 
+ * @param {*} container 
+ * @param {*} trip 
+ */
 function set_show_details(detail_btn, container, trip) 
 {
     detail_btn.on('click', function (e) {
         e.stopPropagation();
 
-        var ObjectId = mongoose.Types.ObjectId;
-        //container.append(trip_detail);
-        // Find trip date
-        trip_data_model.find({ tripID: ObjectId(trip.id)}, function (err, data) {
-            console.log(data[0]);
+        detail_btn.toggleClass('active');
 
-            // Trip information
-            var trip_detail = "Trip Date:" + data[0].datetime + '<br>'
-            + "Upload At: " + trip.upload_datetime + '<br>'
-            + "Location: " + trip.upload_location + '<br>'
-            + "Description: " + trip.upload_description + '<br>'
-            + "Optional Comments: " + trip.upload_optional;
-
-            var detail_container = $('<div/>', {
-                class: 'trip-detail-container'
-            }).html(trip_detail);
-
-            container.after(detail_container);
-
+        var detail_container = $('<div/>', {
+            id: 'trip-detail-' + trip.id,
+            class: 'trip-detail-container'
         });
+
+        if (detail_btn.hasClass('active')) {
+
+            var ObjectId = mongoose.Types.ObjectId;
+
+            trip_data_model.find({ tripID: ObjectId(trip.id)}, function (err, data) {
+                // Trip information
+                var trip_detail = "Trip Date:" + data[0].datetime + '<br>'
+                + "Upload At: " + trip.upload_datetime + '<br>'
+                + "Location: " + trip.upload_location + '<br>'
+                + "Description: " + trip.upload_description + '<br>'
+                + "Optional Comments: " + trip.upload_optional;
+                
+                detail_container.html(trip_detail);
+                container.after(detail_container);
+            });
+
+
+        } else {
+
+            $('#trip-detail-' + trip.id).remove();
+
+        }
+
     });
 }
 
@@ -147,7 +185,13 @@ export default function (trips)
         var trip = trips[i];
         
         // Set all trip to active
-        trip.active = true;
+        if (original_mode) {
+            trip.active = false;
+            trips[0].active = true;
+        } else {
+            trip.active = true;
+        }
+        
         // Random trip color
         trip.color = Util_random_color();
 
@@ -155,13 +199,18 @@ export default function (trips)
         var trip_container = get_trip_container(trip, i);
         var remove_button = get_remove_button(trip, trips, i);
         var detail_button = get_detail_button();
+        var video_button = get_video_button(trip, trip_container);
         
-        set_onclick(trip_container, trip);
+        set_onclick(trip_container, trip, trips);
         set_show_details(detail_button, trip_container, trip);
         // Add to list container
         trip_container
             .append(remove_button)
-            .append(detail_button);
+            .append(detail_button)
+            .append(video_button);
+
+        //get_point_button(trip, trip_container);
+
         panels.data_list_panel.append(trip_container);
     }
 

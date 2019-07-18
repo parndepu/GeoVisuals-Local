@@ -20,6 +20,11 @@ function check_attributes(data)
         }
     }
 
+    for (var i = 0; i < data.length; ++i) {
+        data[i].editNarrative = 'none';
+        data[i].editDate = new Date().getTime();
+    }
+
     return true;
 }
 
