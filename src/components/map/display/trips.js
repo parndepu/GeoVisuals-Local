@@ -1,7 +1,8 @@
 import { Mapbox_map, Mapbox_clear_layers } from '../../index';
 import { default as Map_layers } from './layers';
 import * as turf from '@turf/turf';
-import { original_mode } from '../../../index';
+import { original_mode, map_tooltip } from '../../../index';
+import * as d3 from 'd3';
 
 function get_route()
 {
@@ -26,8 +27,10 @@ export default function (trips)
                 "type": "Feature",
                 "geometry": {
                     "type": "LineString",
-                    "properties": {},
                     "coordinates": trips[i].path
+                },
+                'properties': {
+                    trip: trips[i]
                 }
             }]
         }
@@ -123,10 +126,10 @@ export default function (trips)
 
 
         // Add layer to current map
-        Mapbox_map.addLayer(trajectory_layer);
         Mapbox_map.addLayer(arrow);
         Mapbox_map.addLayer(start);
         Mapbox_map.addLayer(stop);
+        Mapbox_map.addLayer(trajectory_layer);
 
         // Fit map to layer
         var coordinates = geojson.features[0].geometry.coordinates;
@@ -147,8 +150,28 @@ export default function (trips)
     }
 
     if (original_mode) {
+        
+        var video = $(".trip-video-player");
         // create marker here
+        Mapbox_map.on('click', "trip-route-" + video[0].trip.id.toString(), function (e) {
 
+            let coord = e.lngLat;
+            let line = turf.lineString(video[0].trip.path);
+            let pt = turf.point([coord.lng, coord.lat]);
+            let snapped = turf.nearestPointOnLine(line, pt, {units: 'miles'});
+
+            let index = snapped.properties.index;
+            video[0].currentTime = video[0].trip.mediaTimes[index];
+
+        });
+
+        Mapbox_map.on('mouseenter', "trip-route-" + video[0].trip.id.toString(), function (e) {
+            Mapbox_map.getCanvas().style.cursor = 'pointer';
+        });
+
+        Mapbox_map.on('mouseleave', "trip-route-" + video[0].trip.id.toString(), function (e) {
+            Mapbox_map.getCanvas().style.cursor = '';
+        });
 
         return;
     } else {
@@ -227,9 +250,9 @@ export default function (trips)
                     var snapped = turf.nearestPointOnLine(line, pt, {units: 'miles'});
 
                     var index = snapped.properties.index;
-                    console.log(trip.narratives[index]);
+                    //console.log(trip.narratives[index]);
 
-                    console.log(video_player.currentTime = index);
+                    video_player.currentTime = trip.mediaTimes[index];
 
                     marker.setLngLat(snapped.geometry.coordinates);
                 }
@@ -277,6 +300,42 @@ export default function (trips)
                     //marker.addTo(Mapbox_map);
                     //requestAnimationFrame(animate_marker);
                 }
+
+                Mapbox_map.on('click', "trip-route-" + trips[i].id, function (e) {
+                    let coord = e.lngLat;
+                    let line = turf.lineString(video_player.trip.path);
+                    let pt = turf.point([coord.lng, coord.lat]);
+                    let snapped = turf.nearestPointOnLine(line, pt, {units: 'miles'});
+
+                    let index = snapped.properties.index;
+                    video_player.currentTime = video_player.trip.mediaTimes[index];
+
+                });
+
+                Mapbox_map.on('mouseenter', "trip-route-" + trips[i].id, function (e) {
+                    Mapbox_map.getCanvas().style.cursor = 'pointer';
+
+                    let coord = e.lngLat;
+                    let line = turf.lineString(video_player.trip.path);
+                    let pt = turf.point([coord.lng, coord.lat]);
+                    let snapped = turf.nearestPointOnLine(line, pt, {units: 'miles'});
+                    let index = snapped.properties.index;
+
+                    map_tooltip.transition()
+                        .duration(200)
+                        .style('opacity', .9);
+                    map_tooltip.html(video_player.trip.narratives[index])
+                                .style('left', (event.pageX) + 'px')
+                                .style('top', (event.pageY - 28) + 'px' );
+
+                });
+
+                Mapbox_map.on('mouseleave', "trip-route-" + trips[i].id, function (e) {
+                    Mapbox_map.getCanvas().style.cursor = '';
+                    map_tooltip.transition()
+                        .duration(200)
+                        .style('opacity', 0);
+                });
             });
         }
     }

@@ -280,11 +280,15 @@ export default function (trip, container)
         for (var i = 0; i < video_player.length; ++i) {
             if (video_player[i].id === 'trip-video-' + trip.id) {
 
-                $('#video-container-' + trip.id).remove();
+                if ($('#video-container-' + trip.id).hasClass('open')) {
+                    $('#video-container-' + trip.id).remove();
+                    return;
+                }
 
+                $('#video-container-' + trip.id).remove();
                 var video_container = $('<div/>', {
                     id: 'video-container-' + trip.id,
-                    class: 'video-container'
+                    class: 'video-container open'
                 });
 
                 var text = video_time(video_player[i], trip);
@@ -296,7 +300,6 @@ export default function (trip, container)
                 //video_container.append(video_map(trip));
 
                 container.after(video_container);
-                //add_video_map(trip);
             }
         }
     });

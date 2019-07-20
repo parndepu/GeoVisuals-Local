@@ -31,7 +31,7 @@ function get_detail_button()
     info_button.append(info_icon);
 
     return info_button;
-}
+} 
 
 // Remove button
 function get_remove_button(trip, trips, index)

@@ -5,23 +5,28 @@
 <title> GeoVisuals System </title>
 <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 </head>
+<body>
 <div id="main-container">
 
+<div id="left-container">
+</div>
+
+    <!--
     <div id="tools-container">
         <button name="data" class="tools-button active"><i class="fas fa-car-side"></i></button> 
         <button name="query" class="tools-button"><i class="fas fa-vector-square"></i></button>
         <button name="list" class="tools-button"><i class="fas fa-th-list"></i></button> 
-    </div>
+    </div>-->
 
     <div id="tools-resizable-container">
-
+        
         <div id="data-tools-content" class="tools-content active">
             <!-- manage all dataset -->
-            <div class="tools-header">TRIP MANAGER</div>
+            <div class="tools-header"><center>GeoVisuals</center></div>
             
             <!-- import data -->
             <div class="tools-subheader"><i class="fas fa-caret-down"></i> 
-                IMPORT YOUR TRIP 
+                IMPORT YOUR TRIP
                 <button id="reset-upload-btn" title="Reset selected files"><i class="fas fa-sync-alt"></i></button>
             </div>
             <div class="tool-content" id="upload-tool">
@@ -44,12 +49,20 @@
                     </span>
                 </label>
                 
-                Location: <input id="location-input" class="upload-input" type="text" placeholder="location (e.g., city, state)">
-                Description: <input id="description-input" class="upload-input" type="text" placeholder="video description">
-                Optional: <input id="optional-input" class="upload-input" type="text" placeholder="optional comments">
+                Location: <input id="location-input" class="upload-input" type="text" placeholder="location (e.g., city, state)"><br/>
+                Description: <input id="description-input" class="upload-input" type="text" placeholder="video description"><br/>
+                Optional: <input id="optional-input" class="upload-input" type="text" placeholder="optional comments"><br/>
 
                 <button id="upload-btn" class="enable">IMPORT</button> 
                 <button id="original-btn">ENABLE ORIGINAL VIEW</button>
+            </div>
+
+            <div class="tools-subheader"><i class="fas fa-caret-down"></i> 
+                KEYWORD SEARCH
+            </div>
+            <div class="tool-content" id="upload-tool">
+                Search: <input id="keywird-input" class="file-input" type="text" placeholder="Input keywords to search">
+                <button id="search-btn" title="Search keywords"><i class="fas fa-search"></i></button>
             </div>
 
             <!-- data list -->
@@ -57,6 +70,7 @@
             <div class="tool-content" id="datalist-tool">
                 data list content
             </div>
+            
 
         </div>
         <div id="query-tools-content" class="tools-content">
@@ -70,7 +84,7 @@
                 <button id="search-btn" title="Search keywords"><i class="fas fa-search"></i></button>
             </div>
             <div class="tools-subheader"><i class="fas fa-caret-down"></i> 
-                Search Result
+                Search By Trips
             </div>
             <div class="tool-content" id="search-result">
                 list of query
@@ -82,7 +96,14 @@
     <div id="map-container">
         <div id="drag-handle"></div>
         <div id="map"></div>
-        <div id="video-right-container"></div>
+        <div id="video-container">
+            <div id="video-right">video</div>
+            <div id="wordcloud-right" class="wordcloud">wordcloud</div>
+            <div id="slider-right">
+                <button id="video-play-button"><i class="fas fa-play"></i> PLAY</button>
+                <input id="video-slider" type="range" min="0" max="100" class="slider">
+            </div>
+        </div>
     </div>
 
 </div>

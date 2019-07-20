@@ -3,3 +3,4 @@ export * from './dom';
 export * from './query';
 export * from './upload';
 export * from './utils';
+export * from './viz';

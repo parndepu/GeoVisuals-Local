@@ -1,0 +1,1 @@
+export { default as Viz_wordcloud } from './wordcloud';

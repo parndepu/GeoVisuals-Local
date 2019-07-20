@@ -2,7 +2,9 @@
 // (c) 2019, Suphanut Jamonnak
 
 import mapboxgl from 'mapbox-gl';
+import * as d3 from 'd3';
 window.mapboxgl = mapboxgl;
+import * as turf from '@turf/turf';
 
 import * as components from './components';
 
@@ -18,6 +20,10 @@ export var all_trips = null;
 export var select_trips = null;
 export var original_mode = false; // default or original view
 export var Geovisuals_markers = [];
+
+export var map_tooltip = d3.select('#map-container').append('div')
+                    .attr('class', 'map-tooltip')
+                    .style('opacity', 0);
 
 // Initialize Geovisuals system
 function Geovisuals_init()
@@ -54,7 +60,7 @@ function Initialize_map()
     components.Mapbox_map.on('load', function () {
         components.Mapbox_fullscreen_control(components.Mapbox_map);
         components.Mapbox_navigation_control(components.Mapbox_map);
-        components.Mapbox_draw_control(components.Mapbox_map);
+        //components.Mapbox_draw_control(components.Mapbox_map);
     });
 
     return;
@@ -63,7 +69,7 @@ function Initialize_map()
 function Initialize_dom()
 {
     // Set resizable panel
-    components.Dom_resizable_panel();
+    // components.Dom_resizable_panel();
     // Set tool button
     components.Dom_tool_buttons();
     components.Dom_upload_button();
@@ -106,6 +112,7 @@ export function Initialize_user_data()
  */
 export function show_active_trip()
 {
+
     // Filter active trips
     var trips_id = [];
     var active_trips = [];
@@ -118,6 +125,10 @@ export function show_active_trip()
 
     // Find all active trips
     components.Query_db_findTrip(trips_id, active_trips).then( function (result) {
+
+        $('video source').each(function(num,val){
+            $(this).attr('src', '')
+        });
 
         for (var i = 0; i < Geovisuals_markers.length; ++i) {
             Geovisuals_markers[i].remove();
@@ -134,55 +145,66 @@ export function show_active_trip()
 
             // Create video 
             var video_player = document.createElement('video');
-            video_player.id = "trip-video-" + trip.id.toString();;
+            video_player.id = "trip-video-" + trip.id.toString();
             video_player.className = "trip-video-player";
             video_player.src = '../data/videos/' + trip.id.toString() + '.mp4';
             video_player.trip = trip;
 
-            var video_container = $('#video-right-container');
+            var video_container = $('#video-right');
             video_container.empty();
             
-            let play_button = $('<button/>', {
-                id: 'video-play-button'
-            }).css({
-                width: 'auto',
-                height: '30px',
-                position: 'absolute',
-                'z-index': '10000',
-                'right': '5px', 
-                'top': '5px',
-                'color': '#74c476',
-                'background': '#ffffff',
-                'border': '2px solid #d9d9d9', 
-                'border-radius': '5px',
-                'outline': 'none !important'
-            }).html('<i class="fas fa-play"></i> Play');
+            let play_button = $('#video-play-button');
+            play_button.removeClass('play');
+            let slider = $('#video-slider')
+            slider.attr('max', trip.mediaTimes.length - 1);
+            slider.val(0);
+
+            play_button.html('<i class="fas fa-play"></i> PLAY');
+            play_button.css({ 'color': '#74c476' });
 
             video_container.append(video_player);
-            video_container.append(play_button);
+            //video_container.append(play_button);
 
             components.Mapbox_draw_trips(result);
             components.Mapbox_draw_editPoint(result);
 
-            play_button.on('click', (e) => {
-                e.stopPropagation();
+            play_button.off().on('click', (e) => {
+                //e.stopPropagation();
 
                 play_button.toggleClass('play');
                 if (play_button.hasClass('play')) {
-                    play_button.html('<i class="fas fa-pause"></i> Pause');
+                    play_button.html('<i class="fas fa-pause"></i> PAUSE');
                     play_button.css({ 'color': '#fb6a4a' });
                     video_player.play();
                 } else {
-                    play_button.html('<i class="fas fa-play"></i> Play');
+                    play_button.html('<i class="fas fa-play"></i> PLAY');
                     play_button.css({ 'color': '#74c476' });
                     video_player.pause();
                 }
 
             });
 
-            var marker = new mapboxgl.Marker()
+            var marker = new mapboxgl.Marker({
+                draggable: true
+            })
                             .setLngLat(trip.path[0])
                             .addTo(components.Mapbox_map);
+
+            marker.on('drag', () => {
+                var coord = marker.getLngLat();
+                var line = turf.lineString(trip.path);
+                var pt = turf.point([coord.lng, coord.lat]);
+                var snapped = turf.nearestPointOnLine(line, pt, {units: 'miles'});
+
+                var index = snapped.properties.index;
+                video_player.currentTime = trip.mediaTimes[index];
+                marker.setLngLat(snapped.geometry.coordinates);
+            });
+
+            slider.on('input', function () {
+                // update time
+                video_player.currentTime = trip.mediaTimes[this.value];
+            });
 
             let temp_index = 0;
             video_player.ontimeupdate = function () {
@@ -201,10 +223,13 @@ export function show_active_trip()
                     $('#edit-narrative-' + trip.id).val(video_player.trip.edits[index]);
                     $('#edit-narrative-date-' + trip.id).html('<strong>Edit Comments:</strong> ( Last update at ' + video_player.trip.editDates[index] + ')');
                     temp_index = index;
+                    $('#video-slider').val(trip.mediaTimes[index]);
                 }
             };
 
             Geovisuals_markers.push(marker);
+            trip = compute_keywords(trip);
+            components.Viz_wordcloud(trip, $('#wordcloud-right'));
         } else {
 
             console.log('Display new mode');
@@ -220,6 +245,16 @@ export function show_active_trip()
     // Draw trips
 
     return;
+}
+
+export function compute_keywords(trip)
+{
+    let keywords = [];
+    for (let i = 0; i < trip.narratives.length; ++i) {
+        keywords.push(components.Util_extract_keywords(trip.narratives[i]));
+    }
+    trip.keywords = keywords;
+    return trip;
 }
 
 /**
