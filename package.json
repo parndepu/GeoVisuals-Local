@@ -34,7 +34,7 @@
         "electron": "latest",
         "electron-packager": "latest",
         "electron-squirrel-startup": "^1.0.0",
-        "jquery": "^3.2.1",
+        "jquery": "^3.5.0",
         "keyword-extractor": "^0.0.17",
         "mapbox-gl": "^1.1.0",
         "mark.js": "^8.11.1",
